@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/components/Providers';
+import SessionGuard from '@/components/SessionGuard';
 
 export const metadata: Metadata = {
   title: 'PRISM - Ultimate Personal Planner',
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <SessionGuard>{children}</SessionGuard>
+        </Providers>
       </body>
     </html>
   );

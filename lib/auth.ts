@@ -75,11 +75,11 @@ export const authOptions: NextAuthOptions = {
         // Generate device info from request headers
         const deviceInfo = getDeviceInfo(req.headers);
         token.deviceType = deviceInfo.deviceType;
-        
-        // Create session record (this invalidates previous sessions on same device)
+
+        // Create session record (this invalidates previous sessions for this userId)
         try {
           const session = await createSession(
-            user.email,
+            user.id, // Use userId (MongoDB _id)
             token.jti || `${user.id}-${Date.now()}`,
             deviceInfo,
             req.headers.get('x-forwarded-for') || 'unknown'
@@ -96,19 +96,19 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, trigger }: any) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.sessionToken = token.sessionToken;
+        session.sessionToken = token.sessionToken || token.jti || token.sub || null;
         session.deviceType = token.deviceType;
-        
+
         // Validate session is still active
-        if (token.sessionToken) {
-          const isValid = await validateSession(token.sessionToken);
+        if (session.sessionToken) {
+          const isValid = await validateSession(session.sessionToken);
           if (!isValid) {
             // Session has been invalidated (logged in elsewhere)
             throw new Error('Session invalidated');
           }
         }
       }
-      
+
       return session;
     },
   },

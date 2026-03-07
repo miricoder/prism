@@ -39,11 +39,10 @@ export async function createSession(
   try {
     await connectDB();
 
-    // Invalidate all previous sessions for this user on the same device type
+    // Invalidate all previous sessions for this user (regardless of device type)
     await Session.updateMany(
       {
         userId,
-        deviceType: deviceInfo.deviceType,
         isActive: true,
       },
       {

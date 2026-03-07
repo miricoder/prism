@@ -1,5 +1,4 @@
 {
-  "env": ["DATABASE_URL", "NEXTAUTH_SECRET", "ENCRYPTION_KEY"],
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "outputDirectory": ".next"

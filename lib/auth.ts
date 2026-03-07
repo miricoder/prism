@@ -3,6 +3,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcryptjs from 'bcryptjs';
 import { connectDB } from './db';
 import User from '@/models/User';
+import { createSession, validateSession, invalidateAllSessions } from './session-manager';
+import { getDeviceInfo } from './device-detection';
 
 declare module 'next-auth' {
   interface Session {
@@ -10,6 +12,17 @@ declare module 'next-auth' {
       id: string;
       email: string;
     };
+    sessionToken?: string;
+    deviceType?: 'mobile' | 'desktop';
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: string;
+    email: string;
+    sessionToken?: string;
+    deviceType?: 'mobile' | 'desktop';
   }
 }
 
@@ -53,16 +66,49 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, req }: any) {
+      // On initial signin
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        
+        // Generate device info from request headers
+        const deviceInfo = getDeviceInfo(req.headers);
+        token.deviceType = deviceInfo.deviceType;
+        
+        // Create session record (this invalidates previous sessions on same device)
+        try {
+          const session = await createSession(
+            user.email,
+            token.jti || `${user.id}-${Date.now()}`,
+            deviceInfo,
+            req.headers.get('x-forwarded-for') || 'unknown'
+          );
+          token.sessionToken = session.token;
+        } catch (error) {
+          console.error('Failed to create session:', error);
+        }
       }
+      
       return token;
     },
-    async session({ session, token }: any) {
+    
+    async session({ session, token, trigger }: any) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.sessionToken = token.sessionToken;
+        session.deviceType = token.deviceType;
+        
+        // Validate session is still active
+        if (token.sessionToken) {
+          const isValid = await validateSession(token.sessionToken);
+          if (!isValid) {
+            // Session has been invalidated (logged in elsewhere)
+            throw new Error('Session invalidated');
+          }
+        }
       }
+      
       return session;
     },
   },

@@ -5,8 +5,11 @@ import { connectDB } from './db';
 import User from '@/models/User';
 
 declare module 'next-auth' {
-  interface User {
-    id: string;
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+    };
   }
 }
 
@@ -68,6 +71,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

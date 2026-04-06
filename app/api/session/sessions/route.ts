@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { invalidateAllSessions, getUserActiveSessions } from '@/lib/session-manager';
 
 /**
- * GET /api/auth/sessions - Get all active sessions for current user
+ * GET /api/session/sessions - Get all active sessions for current user
  */
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       count: sessions.length,
     });
   } catch (error: any) {
-    console.error('GET /api/auth/sessions error:', error);
+    console.error('GET /api/session/sessions error:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to fetch sessions' },
       { status: 500 }
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/auth/logout-all - Logout from all devices
+ * POST /api/session/logout-all - Logout from all devices
  */
 export async function POST(request: NextRequest) {
   try {
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   } catch (error: any) {
-    console.error('POST /api/auth/logout-all error:', error);
+    console.error('POST /api/session/logout-all error:', error);
     return NextResponse.json(
       { error: error.message || 'Logout failed' },
       { status: 500 }

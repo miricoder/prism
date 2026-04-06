@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Map + Route Builder — Desktop Wireframe</title>
+  <style>
+    :root{--bg:#f6fbff;--panel:#fff;--muted:#6b7280;--accent:#3b82f6}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;margin:0;background:#eef4fb;color:#0f172a}
+    .top{height:64px;background:linear-gradient(90deg,var(--panel),#f8fafc);display:flex;align-items:center;padding:12px 20px;gap:12px;box-shadow:0 1px 0 rgba(15,23,42,0.04)}
+    .search{flex:1;background:#fff;border:1px solid #e6eefc;padding:10px;border-radius:8px;color:var(--muted)}
+    .toolbar .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;margin-left:8px}
+    .layout{display:flex;height:calc(100vh - 64px)}
+    .map{flex:7;padding:18px;background:linear-gradient(180deg,#eef6ff,#eaf8ff);position:relative}
+    .map .box{height:100%;border-radius:12px;border:2px dashed rgba(59,130,246,0.16);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+    .panel{flex:3;border-left:1px solid rgba(15,23,42,0.04);padding:16px;overflow:hidden;display:flex;flex-direction:column}
+    .panel .filters{display:flex;gap:8px;margin-bottom:12px}
+    .pill{background:#fff;padding:8px 10px;border-radius:999px;border:1px solid #e6eefc;font-size:13px}
+    .cards{flex:1;overflow:auto;padding-right:8px}
+    .card{background:var(--panel);border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:0 1px 0 rgba(15,23,42,0.04);display:flex;justify-content:space-between;align-items:center}
+    .card .left{display:flex;flex-direction:column}
+    .ribbon{background:#f3f4f6;padding:4px 8px;border-radius:999px;font-size:12px;color:#374151;display:inline-block;margin-bottom:6px}
+    .badges{font-size:12px;color:var(--muted)}
+    .timeline{height:110px;background:#fff;border-radius:8px;padding:10px;margin-top:12px;border:1px solid #eef2ff}
+    .pinned{display:flex;gap:8px;margin-top:10px}
+    .pinned .pin{background:#fff;padding:8px;border-radius:8px;border:1px solid #eef2ff}
+    footer{height:40px;padding:8px 16px;border-top:1px solid rgba(15,23,42,0.04);display:flex;align-items:center;gap:12px}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="search">🔎 Search itineraries, locations or tags</div>
+    <div class="toolbar"><button class="btn">+ New Plan</button><button class="btn" style="background:#10b981">Optimize</button></div>
+  </div>
+  <div class="layout">
+    <div class="map">
+      <div class="box">Map area • zoom/pan • marker clusters • route overlay</div>
+    </div>
+    <div class="panel">
+      <div class="filters">
+        <div class="pill">All</div>
+        <div class="pill">Live</div>
+        <div class="pill">Locked In</div>
+        <div class="pill">Planning</div>
+      </div>
+      <div class="cards" id="cards">
+        <div class="card"><div class="left"><span class="ribbon">Locked In</span><strong>Weekend in Lisbon</strong><div class="badges">Budget $3,200 · Committed $1,100 · Remaining $2,100</div></div><div class="actions">🔒 ⭐ •</div></div>
+        <div class="card"><div class="left"><span class="ribbon">Planning</span><strong>Family Roadtrip</strong><div class="badges">Budget $5,000 · Committed $600 · Remaining $4,400</div></div><div class="actions">📍 ✏️ •</div></div>
+        <div class="card"><div class="left"><span class="ribbon">Live</span><strong>Conference Visit</strong><div class="badges">Budget $2,200 · Committed $1,900 · Remaining $300</div></div><div class="actions">🔴 🔁 •</div></div>
+        <div class="card"><div class="left"><span class="ribbon">Planning</span><strong>Weekend Hike</strong><div class="badges">Budget $450 · Committed $50 · Remaining $400</div></div><div class="actions">🏕️ •</div></div>
+      </div>
+      <div class="timeline">Compact timeline — syncs with map (click item to focus)</div>
+      <div class="pinned"><div class="pin">Pinned: Summer</div><div class="pin">Pinned: Work Trips</div></div>
+      <footer>Filters • Saved Views • Export</footer>
+    </div>
+  </div>
+</body>
+</html>

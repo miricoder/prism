@@ -25,8 +25,10 @@ export default function Sidebar() {
         {SECTIONS.map((section) => (
           <Link
             key={section.id}
-            href={`/app${section.route}`}
+            href={section.route}
             className={`flex items-center gap-3 px-4 py-2 rounded hover:bg-[#2563eb] transition-colors ${!section.enabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            aria-disabled={!section.enabled}
+            tabIndex={section.enabled ? 0 : -1}
           >
             <span className="text-lg">{section.icon}</span>
             {!collapsed && <span className="text-sm">{section.label}</span>}
@@ -35,7 +37,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-[#334155]">
-        <Link href="/app/settings" className="flex items-center gap-3 px-4 py-2 rounded hover:bg-[#2563eb] transition-colors">
+        <Link href="/settings" className="flex items-center gap-3 px-4 py-2 rounded hover:bg-[#2563eb] transition-colors">
           <span className="text-lg">⚙️</span>
           {!collapsed && <span className="text-sm">Settings</span>}
         </Link>

@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 interface ImportDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onImport: (content: string, format: 'csv' | 'json' | 'text', tripName: string) => Promise<void>;
+  onImport: (content: string, format: 'csv' | 'json' | 'text', itineraryName: string) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -17,7 +17,7 @@ export default function ImportDialog({
 }: ImportDialogProps) {
   const [content, setContent] = useState('');
   const [format, setFormat] = useState<'csv' | 'json' | 'text'>('csv');
-  const [tripName, setTripName] = useState('');
+  const [itineraryName, setItineraryName] = useState('');
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<any>(null);
   const [step, setStep] = useState<'upload' | 'preview'>('upload');
@@ -50,13 +50,13 @@ export default function ImportDialog({
 
     try {
       setError('');
-      const response = await fetch('/api/trips/import', {
+      const response = await fetch('/api/itineraries/import', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content,
           format,
-          tripName: tripName || undefined,
+          itineraryName: itineraryName || undefined,
         }),
       });
 
@@ -76,7 +76,7 @@ export default function ImportDialog({
   const handleConfirmImport = async () => {
     try {
       setError('');
-      await onImport(content, format, tripName || 'Imported Trip');
+      await onImport(content, format, itineraryName || 'Imported Itinerary');
       handleClose();
     } catch (err: any) {
       setError(err.message || 'Import failed');
@@ -86,7 +86,7 @@ export default function ImportDialog({
   const handleClose = () => {
     setContent('');
     setFormat('csv');
-    setTripName('');
+    setItineraryName('');
     setError('');
     setPreview(null);
     setStep('upload');
@@ -97,11 +97,11 @@ export default function ImportDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-slate-900 rounded-lg w-full max-w-2xl mx-4 shadow-xl border border-slate-700">
+      <div className="bg-slate-900 rounded-lg w-full max-w-2xl mx-4 shadow-xl border border-slate-700 flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
           <h2 className="text-xl font-semibold text-white">
-            {step === 'upload' ? 'Import Travel Data' : 'Preview Import'}
+            {step === 'upload' ? 'Import Entries' : 'Preview Import'}
           </h2>
           <button
             onClick={handleClose}
@@ -111,8 +111,8 @@ export default function ImportDialog({
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-4">
+        {/* Content (scrollable) */}
+        <div className="p-6 space-y-4 overflow-auto flex-1">
           {step === 'upload' && (
             <>
               {/* Format Selection */}
@@ -137,15 +137,15 @@ export default function ImportDialog({
                 </div>
               </div>
 
-              {/* Trip Name */}
+              {/* Itinerary Name */}
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Trip Name (optional)
+                  Itinerary Name (optional)
                 </label>
                 <input
                   type="text"
-                  value={tripName}
-                  onChange={(e) => setTripName(e.target.value)}
+                  value={itineraryName}
+                  onChange={(e) => setItineraryName(e.target.value)}
                   placeholder="e.g., Summer Europe 2026"
                   className="w-full px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
                 />
@@ -211,7 +211,7 @@ export default function ImportDialog({
                 )}
                 {format === 'json' && (
                   <p>
-                    JSON array of objects or single trip object. Each object should have{' '}
+                    JSON array of objects or single itinerary object. Each object should have{' '}
                     <code>title</code>, <code>cost</code>, <code>date</code> fields.
                   </p>
                 )}
@@ -227,12 +227,12 @@ export default function ImportDialog({
 
           {step === 'preview' && preview && (
             <div className="space-y-4">
-              {/* Trip Info */}
+              {/* Itinerary Info */}
               <div className="bg-slate-800 p-4 rounded-lg">
-                <h3 className="font-semibold text-white mb-3">Trip Summary</h3>
+                <h3 className="font-semibold text-white mb-3">Itinerary Summary</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <p className="text-slate-400">Trip Name</p>
+                    <p className="text-slate-400">Itinerary Name</p>
                     <p className="text-white">{preview.name}</p>
                   </div>
                   <div>
@@ -303,8 +303,8 @@ export default function ImportDialog({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="flex gap-3 p-6 border-t border-slate-700 justify-end">
+        {/* Footer (always visible) */}
+        <div className="flex flex-wrap gap-3 p-4 border-t border-slate-700 justify-end bg-slate-900">
           <button
             onClick={handleClose}
             className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 font-medium transition"

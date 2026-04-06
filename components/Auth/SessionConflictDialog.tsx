@@ -42,7 +42,7 @@ export default function SessionConflictDialog({
 
         {/* Message */}
         <p className="text-slate-300">
-          You're already logged in from another browser or device. Signing in here will sign you out there.
+          You&apos;re already logged in from another browser or device. Signing in here will sign you out there.
         </p>
 
         {/* Device Info */}

@@ -4,7 +4,7 @@ import Session from '@/models/Session';
 import { getDeviceInfo, getClientIp } from '@/lib/device-detection';
 
 /**
- * POST /api/auth/check-session-conflict
+ * POST /api/session/check-conflict
  * Check if user is trying to log in from a different device/browser
  */
 export async function POST(request: NextRequest) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       message: 'No conflict detected',
     });
   } catch (error: any) {
-    console.error('POST /api/auth/check-session-conflict error:', error);
+    console.error('POST /api/session/check-conflict error:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to check session conflict' },
       { status: 500 }

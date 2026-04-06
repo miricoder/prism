@@ -71,9 +71,10 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        
-        // Generate device info from request headers
-        const deviceInfo = getDeviceInfo(req.headers);
+
+        // Generate device info from request headers (req may be undefined)
+        const headers = req?.headers ?? new Headers();
+        const deviceInfo = getDeviceInfo(headers);
         token.deviceType = deviceInfo.deviceType;
 
         // Create session record (this invalidates previous sessions for this userId)
@@ -82,7 +83,7 @@ export const authOptions: NextAuthOptions = {
             user.id, // Use userId (MongoDB _id)
             token.jti || `${user.id}-${Date.now()}`,
             deviceInfo,
-            req.headers.get('x-forwarded-for') || 'unknown'
+            headers.get('x-forwarded-for') || 'unknown'
           );
           token.sessionToken = session.token;
         } catch (error) {

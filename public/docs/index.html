@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRISM API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+    <style>
+      body { margin: 0; background: #0b1220; }
+      html { scroll-behavior: smooth; }
+      .report {
+        padding: 18px;
+        color: #f8fafc;
+        background: linear-gradient(135deg, #0f172a 0%, #111827 60%, #0b1220 100%);
+        border-bottom: 1px solid #1f2937;
+        font-family: ui-sans-serif, system-ui;
+      }
+      .report strong { color: #f8fafc; }
+      .report code { color: #bae6fd; }
+      .topbar-links {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .jump-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        background: #0b1220;
+        border: 1px solid #1f2937;
+        border-radius: 999px;
+        color: #e2e8f0;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .report-card {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .report-tile {
+        background: #0b1220;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .report-tile h3 { margin: 0 0 6px; font-size: 13px; color: #e2e8f0; }
+      .report-tile p { margin: 0; font-size: 12px; color: #94a3b8; }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #a7f3d0;
+        color: #0f172a;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .unit-section {
+        margin: 28px auto 40px;
+        max-width: 1100px;
+        padding: 0 18px;
+        font-family: ui-sans-serif, system-ui;
+      }
+      .unit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .unit-header h2 { margin: 0; color: #0f172a; }
+      .unit-header span { color: #475569; font-size: 13px; }
+      .unit-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+      }
+      .unit-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+      }
+      .unit-card header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .unit-card h3 { margin: 0; font-size: 14px; color: #0f172a; }
+      .unit-method {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .unit-status {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #dcfce7;
+        color: #166534;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .unit-meta { margin: 8px 0; font-size: 12px; color: #64748b; }
+      .unit-details {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      .unit-details section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; }
+      .unit-details h4 { margin: 0 0 6px; font-size: 12px; color: #334155; }
+      .unit-details pre {
+        margin: 0;
+        font-size: 11px;
+        color: #0f172a;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      #swagger-ui {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+      .swagger-ui .topbar {
+        background-color: #0f172a;
+      }
+      .swagger-ui .info .title, .swagger-ui .info .description {
+        color: #0f172a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="report">
+      <div class="report-card">
+        <div class="report-tile">
+          <h3>Unit Test Status</h3>
+          <div class="status-pill" id="report">Loading...</div>
+          <p id="report-time">Checked: --</p>
+        </div>
+        <div class="report-tile">
+          <h3>Test Summary</h3>
+          <p>Open the detailed unit test dashboard at the end of this page.</p>
+          <div class="topbar-links">
+            <a class="jump-link" href="#unit-tests">Jump to unit test dashboard</a>
+            <a class="jump-link" id="report-link" href="test-report.json" target="_blank" rel="noopener noreferrer">Open raw report</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="swagger-ui"></div>
+    <div id="unit-tests" class="unit-section">
+      <div class="unit-header">
+        <h2>Unit Test Dashboard</h2>
+        <span>Detailed request/response log</span>
+      </div>
+      <div id="report-steps" class="unit-grid"></div>
+    </div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      fetch('test-report.json')
+        .then((res) => res.json())
+        .then((data) => {
+          const status = data.status || 'unknown';
+          const checkedAt = data.checkedAt || 'n/a';
+          document.getElementById('report').textContent = status.toUpperCase();
+          document.getElementById('report-time').textContent = `Checked: ${checkedAt}`;
+          const steps = Array.isArray(data.results) ? data.results : [];
+          const container = document.getElementById('report-steps');
+          container.innerHTML = steps.map((step) => {
+            const request = step.request || {};
+            const response = step.response || {};
+            const method = request.method || 'GET';
+            const url = request.url || '';
+            const statusCode = response.status || 'n/a';
+            const reqBody = request.body ? JSON.stringify(request.body, null, 2) : 'None';
+            const resBody = response.body ? response.body : 'None';
+            const headers = response.headers ? JSON.stringify(response.headers, null, 2) : 'None';
+            return `
+              <article class="unit-card">
+                <header>
+                  <h3>${step.name || 'step'}</h3>
+                  <span class="unit-method">${method}</span>
+                  <span class="unit-status">${statusCode}</span>
+                </header>
+                <div class="unit-meta">${url}</div>
+                <div class="unit-details">
+                  <section>
+                    <h4>Request</h4>
+                    <pre>${reqBody}</pre>
+                  </section>
+                  <section>
+                    <h4>Response Headers</h4>
+                    <pre>${headers}</pre>
+                  </section>
+                  <section>
+                    <h4>Response Body</h4>
+                    <pre>${resBody}</pre>
+                  </section>
+                </div>
+              </article>
+            `;
+          }).join('');
+        })
+        .catch(() => {
+          document.getElementById('report').textContent = 'report unavailable';
+          document.getElementById('report-steps').textContent = 'No report data available.';
+        });
+
+      SwaggerUIBundle({
+        url: 'swagger.json',
+        dom_id: '#swagger-ui',
+      });
+    </script>
+  </body>
+</html>

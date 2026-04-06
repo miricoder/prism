@@ -1,0 +1,96 @@
+{
+  "status": "pass",
+  "baseUrl": "http://localhost:3000",
+  "checkedAt": "2026-03-15T01:49:54.987817+00:00",
+  "results": [
+    {
+      "name": "providers",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/auth/providers"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+          "content-type": "application/json",
+          "Date": "Sun, 15 Mar 2026 01:49:54 GMT",
+          "Connection": "close",
+          "Transfer-Encoding": "chunked"
+        },
+        "body": "{\"credentials\":{\"id\":\"credentials\",\"name\":\"Credentials\",\"type\":\"credentials\",\"signinUrl\":\"http://localhost:3000/api/auth/signin/credentials\",\"callbackUrl\":\"http://localhost:3000/api/auth/callback/credentials\"}}"
+      }
+    },
+    {
+      "name": "csrf",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/auth/csrf"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+          "cache-control": "private, no-cache, no-store",
+          "content-type": "application/json",
+          "expires": "0",
+          "pragma": "no-cache",
+          "set-cookie": "next-auth.csrf-token=530e98f88429c4efcd20156360d9c6edc73750b94bb8826ccdef99a01a77d353%7C6f5c400072d0ad51e9b91f7a9052ab8a0cf9df882d492f59796ab5882304d53a; Path=/; HttpOnly; SameSite=Lax",
+          "Date": "Sun, 15 Mar 2026 01:49:54 GMT",
+          "Connection": "close",
+          "Transfer-Encoding": "chunked"
+        },
+        "body": "{\"csrfToken\":\"530e98f88429c4efcd20156360d9c6edc73750b94bb8826ccdef99a01a77d353\"}"
+      }
+    },
+    {
+      "name": "credentials",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/auth/callback/credentials",
+        "body": {
+          "csrfToken": "530e98f88429c4efcd20156360d9c6edc73750b94bb8826ccdef99a01a77d353",
+          "email": "test@example.com",
+          "password": "***redacted***",
+          "redirect": "false",
+          "callbackUrl": "http://localhost:3000",
+          "json": "true"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+          "content-type": "application/json",
+          "set-cookie": "next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..OXySSSFODvPx7940.TmmcJ1y4i9xfAFDc6_O9dlpFZGh_74vMMwULSpvdweIWTusT6M_q6A7lmG2wbHA5-syFwmw4cnrcv0v1-CTSUr1EW1z_KDVXpLLOU4uim4TZCR_QzplRk02SR1AfgMgmpYNDMska7weD_0RTphdZ06UuhCQVbPbjHYomNvpSS1w134ihmP6SPQQYhIMF-rHRaEs_2ii-ThbidmcYt5J1SwefN1PrjNmgHF_MCX-9z-QApmngGGODXtA1-beafEakhRf5Twahqbrs5-VCRsJnQxtKug_LNPnzSe8_2CEvIC86Ibc4dO8w_LimvvbG6KY3NW-v7XE8U2AgS1I.vrF1p81WWX2Y-jXWHJIzmA; Path=/; Expires=Tue, 14 Apr 2026 01:49:54 GMT; HttpOnly; SameSite=Lax",
+          "Date": "Sun, 15 Mar 2026 01:49:54 GMT",
+          "Connection": "close",
+          "Transfer-Encoding": "chunked"
+        },
+        "body": "{\"url\":\"http://localhost:3000\"}"
+      }
+    },
+    {
+      "name": "session",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/auth/session"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",
+          "cache-control": "private, no-cache, no-store",
+          "content-type": "application/json",
+          "expires": "0",
+          "pragma": "no-cache",
+          "set-cookie": "next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..PYnfAxxOx_TQnt5B.VboJPY4d_0m207JFdQ4knjDjlgKGIaNwYjAZuUAV43T5897XHWtIs8tdk60x3NNejQmaQd_s9FiQbWbHOHbrEey7_iguAMBjAZyG7XAeH71Lc18q581RMDA7jMxzk9AMPLN9aK3b5VzjzQl1ophjiE4NEMctOtnNqTnG1pJQKHtaHdQGbe1xZqIL4X_ojzkHTg2bcn-x8uKmdX_lmfa9HkiimfHyg5KlPeR35j1fjUjd7HqQpEKy501psg89oyTqf7bn2EjrYQMbVmREqQHWzHlOCmpMJn9kTjrj0jKRsIZXsAvelbm2upiRUQGnh8aYNSNWtbnyXa4WRZE.qAKNWmmyi1Ktnsi2t3Og3Q; Path=/; Expires=Tue, 14 Apr 2026 01:49:54 GMT; HttpOnly; SameSite=Lax",
+          "Date": "Sun, 15 Mar 2026 01:49:54 GMT",
+          "Connection": "close",
+          "Transfer-Encoding": "chunked"
+        },
+        "body": "{\"user\":{\"email\":\"test@example.com\",\"id\":\"69b6097cd8cf9c767f9f1fdc\"},\"expires\":\"2026-04-14T01:49:54.966Z\",\"sessionToken\":\"69b6097cd8cf9c767f9f1fdc-1773539394903\",\"deviceType\":\"desktop\"}"
+      }
+    }
+  ]
+}

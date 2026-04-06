@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
       fields: body.fields || [],
       status: body.status || 'planning',
       tags: body.tags || [],
+      isLocked: body.isLocked ?? false,
     });
 
     await trip.save();

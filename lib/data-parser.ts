@@ -1,5 +1,5 @@
 /**
- * Smart Data Parser - Intelligently converts various data formats to structured trip data
+ * Smart Data Parser - Intelligently converts various data formats to structured itinerary data
  */
 
 export type DataType = 'text' | 'number' | 'date' | 'currency' | 'boolean' | 'url';
@@ -200,11 +200,11 @@ export function detectEntryType(
   return 'other';
 }
 
-// Intelligent CSV-to-Trip parser
+// Intelligent CSV-to-itinerary parser
 export function parseCSVToTrip(
   csvContent: string,
   userId: string,
-  tripName?: string
+  itineraryName?: string
 ): ParsedTrip {
   const rows = parseCSV(csvContent);
   if (rows.length === 0) {
@@ -270,10 +270,9 @@ export function parseCSVToTrip(
     }
   }
 
-  // Calculate trip-level metadata
+  // Calculate itinerary-level metadata
   let startDate: Date | undefined;
   let endDate: Date | undefined;
-  let totalCost = 0;
 
   for (const entry of entries) {
     if (entry.startDate && (!startDate || entry.startDate < startDate)) {
@@ -282,16 +281,12 @@ export function parseCSVToTrip(
     if (entry.endDate && (!endDate || entry.endDate > endDate)) {
       endDate = entry.endDate;
     }
-    if (entry.cost) {
-      totalCost += entry.cost;
-    }
   }
 
   return {
-    name: tripName || 'Imported Trip',
+    name: itineraryName || 'Imported Itinerary',
     startDate,
     endDate,
-    budget: totalCost > 0 ? { total: totalCost, currency: 'USD' } : undefined,
     entries,
     fields: tripFields,
     fieldSchema,
@@ -302,7 +297,7 @@ export function parseCSVToTrip(
 export function parseTextToTrip(
   textContent: string,
   userId: string,
-  tripName?: string
+  itineraryName?: string
 ): ParsedTrip {
   // Simple heuristic: split by lines, detect entries
   const lines = textContent.split('\n').filter((l) => l.trim());
@@ -352,7 +347,7 @@ export function parseTextToTrip(
   }
 
   return {
-    name: tripName || 'Imported Trip',
+    name: itineraryName || 'Imported Itinerary',
     entries,
     fields: [],
     fieldSchema,
@@ -364,20 +359,20 @@ export function parseImport(
   content: string,
   format: 'csv' | 'json' | 'text',
   userId: string,
-  tripName?: string
+  itineraryName?: string
 ): ParsedTrip {
   switch (format) {
     case 'csv':
-      return parseCSVToTrip(content, userId, tripName);
+      return parseCSVToTrip(content, userId, itineraryName);
     case 'text':
-      return parseTextToTrip(content, userId, tripName);
+      return parseTextToTrip(content, userId, itineraryName);
     case 'json':
       try {
         const json = JSON.parse(content);
         if (Array.isArray(json)) {
-          // Array of trips or entries
+          // Array of itineraries or entries
           return {
-            name: tripName || 'Imported Trip',
+            name: itineraryName || 'Imported Itinerary',
             entries: json.map((item: any) => ({
               type: item.type || 'other',
               title: item.title || item.name || '',
@@ -393,9 +388,9 @@ export function parseImport(
             fieldSchema: new Map(),
           };
         } else {
-          // Single trip object
+          // Single itinerary object
           return {
-            name: tripName || json.name || 'Imported Trip',
+            name: itineraryName || json.name || 'Imported Itinerary',
             destination: json.destination,
             startDate: json.startDate ? new Date(json.startDate) : undefined,
             endDate: json.endDate ? new Date(json.endDate) : undefined,

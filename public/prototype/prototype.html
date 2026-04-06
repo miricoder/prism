@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interactive Prototype — Map + Route Builder</title>
+  <link rel="stylesheet" href="/prototype/prototype.css">
+</head>
+<body>
+  <header class="top">
+    <div class="search">🔎 Search itineraries, locations or tags</div>
+    <div class="toolbar"><button id="newPlan" class="btn">+ New Plan</button><button id="optimize" class="btn green">Optimize</button></div>
+  </header>
+  <main class="layout">
+    <section class="map" id="map">
+      <div class="map-overlay" id="mapOverlay">Map placeholder • click markers to focus</div>
+      <div class="cluster-tip">Clusters: 12 • Zoom to reveal</div>
+    </section>
+    <aside class="panel" id="panel">
+      <div class="panel-top">
+        <div class="filters" id="filters">
+          <button class="pill active" data-filter="all">All</button>
+          <button class="pill" data-filter="live">Live</button>
+          <button class="pill" data-filter="locked">Locked</button>
+          <button class="pill" data-filter="planning">Planning</button>
+        </div>
+        <div class="view-toggle">
+          <button id="viewList" class="small">List</button>
+          <button id="viewTimeline" class="small">Timeline</button>
+          <button id="viewKanban" class="small">Kanban</button>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+      <div class="timeline" id="timeline">Compact timeline — click to focus route</div>
+    </aside>
+  </main>
+
+  <!-- Mobile bottom sheet -->
+  <div id="sheet" class="bottom-sheet">
+    <div class="drag" id="drag"></div>
+    <div class="sheet-filters" id="sheetFilters">
+      <button class="pill">Nearby</button>
+      <button class="pill">Live</button>
+      <button class="pill">Locked</button>
+      <button class="pill">Starred</button>
+    </div>
+    <div class="sheet-list" id="sheetList"></div>
+  </div>
+
+  <!-- Detail overlay -->
+  <div id="detailOverlay" class="detail-overlay hidden">
+    <div class="detail-card">
+      <button id="closeDetail" class="close">✕</button>
+      <h3 id="detailTitle">Itinerary Title</h3>
+      <div id="detailBody"></div>
+      <div class="detail-actions">
+        <button id="lockBtn" class="action">Lock</button>
+        <button id="liveBtn" class="action">Live</button>
+        <button id="archiveBtn" class="action danger">Archive</button>
+        <button id="exportBtn" class="action">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/prototype/prototype.js"></script>
+</body>
+</html>

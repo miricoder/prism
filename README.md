@@ -120,6 +120,33 @@ prism/
 
 ---
 
+## 🌿 Branching + Vercel Deployment Workflow
+
+PRISM uses a **branch-per-capability** workflow with Vercel **Preview Deployments** for testing and `main` as the only **Production** source.
+
+### Branch rules
+
+- **`main`**: production-only (must always build + lint)
+- **`cap/<capability>`**: feature/capability branches (e.g. `cap/travel`, `cap/resume`)
+- Optional: **`fix/<topic>`** for urgent hotfixes
+
+### Vercel rules
+
+- **Production Branch**: `main`
+- Every push to any non-`main` branch produces a **Preview URL**
+
+### Promote Preview → Production
+
+- Push to `cap/*` → test the Preview URL (mobile + desktop)
+- When accepted → open PR → merge into `main`
+
+### Rollback
+
+- **Fast rollback (Vercel)**: promote a previous Production deployment in Vercel
+- **Source rollback (Git)**: revert the merge commit in `main` and redeploy
+
+---
+
 ## 🌐 Deployment to Ver cel (Next Steps)
 
 ### Pre-Deployment Checklist

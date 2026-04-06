@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Alt Prototype — Map-Centric Planner</title>
+  <link rel="stylesheet" href="./alt_prototype.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">📍 Advanced Planner — Map View</div>
+    <div class="controls">
+      <input placeholder="Search itineraries or places" class="search" />
+      <button id="newBtn" class="btn">+ New</button>
+      <button id="routeBtn" class="btn ghost">Build Route</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <main class="map-area">
+      <div class="map-placeholder" id="mapPlaceholder">Map • clustering • route overlay
+        <div class="zoom">Zoom level: <span id="zoomLevel">3</span></div>
+      </div>
+      <div class="map-legend">
+        <div>Clusters</div>
+        <div>Markers</div>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="tabs">
+        <button class="tab active" data-tab="list">List</button>
+        <button class="tab" data-tab="timeline">Timeline</button>
+        <button class="tab" data-tab="archive">Archive</button>
+      </div>
+
+      <div class="tab-panels">
+        <div id="panel-list" class="panel active">
+          <div id="listItems" class="list"></div>
+        </div>
+        <div id="panel-timeline" class="panel">
+          <div id="timelineItems" class="timeline"></div>
+        </div>
+        <div id="panel-archive" class="panel">
+          <div id="archiveItems" class="archive"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Persistent overlay that mirrors the current detail view -->
+  <div id="overlay" class="overlay hidden">
+    <div class="overlay-card">
+      <div class="overlay-header">
+        <div>
+          <h3 id="ovTitle">Itinerary Title</h3>
+          <div id="ovMeta" class="meta">Dates · Location</div>
+        </div>
+        <div class="overlay-actions">
+          <button id="ovLock" class="small">🔒</button>
+          <button id="ovLive" class="small">●</button>
+          <button id="ovArchive" class="small danger">Archive</button>
+        </div>
+      </div>
+      <div class="overlay-body">
+        <section class="entries">
+          <h4>Planned Activities</h4>
+          <ul id="ovEntries" class="entries-list"></ul>
+        </section>
+        <section class="notes">
+          <h4>Notes</h4>
+          <div id="ovNotes" class="notes-box">—</div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="./alt_prototype.js"></script>
+</body>
+</html>

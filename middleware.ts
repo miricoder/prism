@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Allow public routes
+  if (pathname === '/' || pathname === '/login') {
+    return NextResponse.next();
+  }
+
   // Strict session validation: check token in DB
   try {
     const token = await getToken({
@@ -9,14 +16,16 @@ export async function middleware(request: NextRequest) {
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    if (token && token.jti) {
+    const sessionToken = token?.sessionToken || token?.jti || token?.sub;
+    if (sessionToken) {
       // Validate session in DB
-      const res = await fetch('/api/auth/validate-session', {
+      const validateUrl = new URL('/api/session/validate', request.nextUrl.origin);
+      const res = await fetch(validateUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token: token.jti }),
+        body: JSON.stringify({ token: sessionToken }),
       });
       const data = await res.json();
       if (data.active) {
@@ -28,12 +37,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Session invalid: clear cookies and redirect to login
-  const response = NextResponse.redirect('/login');
+  const response = NextResponse.redirect(new URL('/', request.nextUrl.origin));
   response.cookies.delete('next-auth.session-token');
   response.cookies.delete('next-auth.csrf-token');
   return response;
-
-  return NextResponse.next();
 }
 
 export const config = {

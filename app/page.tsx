@@ -37,7 +37,7 @@ export default function LoginPage() {
     try {
       // Get user ID by making a dummy request or checking existing session
       // For now, we'll use email as a temporary identifier
-      const conflictRes = await fetch('/api/auth/check-conflict', {
+      const conflictRes = await fetch('/api/session/check-conflict', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: email }),

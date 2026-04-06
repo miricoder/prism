@@ -59,21 +59,27 @@ export async function PUT(
     const body = await request.json();
     await connectDB();
 
+    const updates: Record<string, any> = {};
+    if (Object.prototype.hasOwnProperty.call(body, 'name')) updates.name = body.name;
+    if (Object.prototype.hasOwnProperty.call(body, 'destination')) updates.destination = body.destination;
+    if (Object.prototype.hasOwnProperty.call(body, 'startDate')) {
+      updates.startDate = body.startDate ? new Date(body.startDate) : undefined;
+    }
+    if (Object.prototype.hasOwnProperty.call(body, 'endDate')) {
+      updates.endDate = body.endDate ? new Date(body.endDate) : undefined;
+    }
+    if (Object.prototype.hasOwnProperty.call(body, 'reason')) updates.reason = body.reason;
+    if (Object.prototype.hasOwnProperty.call(body, 'description')) updates.description = body.description;
+    if (Object.prototype.hasOwnProperty.call(body, 'budget')) updates.budget = body.budget;
+    if (Object.prototype.hasOwnProperty.call(body, 'entries')) updates.entries = body.entries;
+    if (Object.prototype.hasOwnProperty.call(body, 'fields')) updates.fields = body.fields;
+    if (Object.prototype.hasOwnProperty.call(body, 'status')) updates.status = body.status;
+    if (Object.prototype.hasOwnProperty.call(body, 'tags')) updates.tags = body.tags;
+    if (Object.prototype.hasOwnProperty.call(body, 'isLocked')) updates.isLocked = body.isLocked;
+
     const trip = await Trip.findOneAndUpdate(
       { _id: params.id, userId: session.user.email },
-      {
-        name: body.name,
-        destination: body.destination,
-        startDate: body.startDate ? new Date(body.startDate) : undefined,
-        endDate: body.endDate ? new Date(body.endDate) : undefined,
-        reason: body.reason,
-        description: body.description,
-        budget: body.budget,
-        entries: body.entries,
-        fields: body.fields,
-        status: body.status,
-        tags: body.tags,
-      },
+      updates,
       { new: true }
     );
 
@@ -112,14 +118,20 @@ export async function DELETE(
 
     await connectDB();
 
-    const trip = await Trip.findOneAndDelete({
+    const existingTrip = await Trip.findOne({
       _id: params.id,
       userId: session.user.email,
     });
 
-    if (!trip) {
+    if (!existingTrip) {
       return NextResponse.json({ error: 'Trip not found' }, { status: 404 });
     }
+
+    if (existingTrip.isLocked) {
+      return NextResponse.json({ error: 'Trip is locked' }, { status: 423 });
+    }
+
+    await Trip.deleteOne({ _id: params.id, userId: session.user.email });
 
     return NextResponse.json({
       success: true,

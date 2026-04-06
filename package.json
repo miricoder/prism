@@ -5,10 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:monitor": "node scripts/dev_monitor.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "monitor:preview": "node scripts/monitor_preview.mjs"
   },
   "dependencies": {
     "autoprefixer": "^10.4.14",
